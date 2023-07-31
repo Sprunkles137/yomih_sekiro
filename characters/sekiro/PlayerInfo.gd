@@ -1,7 +1,8 @@
 extends PlayerInfo
 
-onready var posture_meter = $"%PostureMeter"
 onready var spirit_emblem_count = $"%SpiritEmblemCount"
+onready var posture_meter = $"%PostureMeter"
+onready var deathblow_meter = $"%DeathblowMeter"
 
 func set_fighter(fighter):
 	.set_fighter(fighter)
@@ -18,5 +19,6 @@ func _process(delta):
 	if is_instance_valid(fighter):
 		spirit_emblem_count.text = str(fighter.spirit_emblems)
 		posture_meter.value = 1 - (fighter.posture / float(fighter.MAX_POSTURE))
-		posture_meter.self_modulate.a = 1.0
-		posture_meter.tint_progress = Color("ff9113") if posture_meter.value > 0.67 else Color("ffd519")
+		posture_meter.tint_progress = Color("ff9113") if posture_meter.value > 0.667 else Color("ffd519")
+		deathblow_meter.value = fighter.deathblow / float(fighter.MAX_DEATHBLOW)
+		deathblow_meter.tint_progress = Color("ff9113") if deathblow_meter.value < 0.333 else Color("ffd519")

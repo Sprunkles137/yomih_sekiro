@@ -1,0 +1,1 @@
+Use tremolo and frequency to create a whistling sound. Not controlled by the use of other waveform controls, however.

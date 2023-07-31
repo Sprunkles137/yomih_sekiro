@@ -1,11 +1,13 @@
 extends Fighter
 
 const MAX_POSTURE = 333
+const MAX_DEATHBLOW = 100
 const MAX_SPIRIT_EMBLEMS = 20
 const POSTURE_RECOVERY_TIME = 30
 
 var parry_anim: String = ""
 var posture: int = MAX_POSTURE
+var deathblow: int = 0
 var spirit_emblems: int = 12
 var time_since_last_hit: int = 0
 
@@ -43,6 +45,13 @@ func recover_posture_passive(val: int):
 		recover_posture(val)
 	return posture
 
+func gain_deathblow_meter(val: int):
+	deathblow = Utils.int_min(deathblow + val, MAX_DEATHBLOW)
+	if deathblow == MAX_DEATHBLOW:
+		current_state().queue_state_change("StaggerOpponent")
+		deathblow = 0
+	return deathblow
+
 func change_emblems(count: int):
 	spirit_emblems = Utils.int_min(
 		Utils.int_max(spirit_emblems + count, 0),
@@ -55,13 +64,14 @@ func on_got_hit():
 	time_since_last_hit = 0
 
 func set_relative_advantage(opponent, relative: int):
+	if relative == 0:
+		return
 	current_state().anim_length = opponent.current_state().anim_length
 	current_state().iasa_at = opponent.current_state().iasa_at
-	# Grant whatever frame advantage we can if the opponent recovers sooner than our max
-	if opponent.current_state().iasa_at - opponent.current_state().current_tick < relative:
-		# current_state().enable_interrupt()
-		# Apply hitstun
-		return
+	var remaining_time = opponent.current_state().iasa_at - opponent.current_state().current_tick
+	# Set hitlag on opponent to accomodate lost time
+	if remaining_time < relative:
+		opponent.hitlag_ticks = relative - remaining_time
 	# Set advantage relative to anim length if no interruptible frame exists
 	if opponent.current_state().iasa_at < 0:
 		current_state().current_tick = opponent.current_state().anim_length - relative
@@ -150,7 +160,10 @@ func hit_by(hitbox):
 				opponent.add_penalty( - 25)
 			# take_damage(fixed.round(fixed.mul(str(hitbox.damage / PARRY_CHIP_DIVISOR), hitbox.chip_damage_modifier)))
 
-			apply_force_relative(fixed.mul(fixed.div(hitbox.knockback, fixed.mul(PARRY_KNOCKBACK_DIVISOR, "-1")), hitbox.block_pushback_modifier), "0")
+			apply_force_relative(fixed.mul(fixed.div(
+				hitbox.knockback,
+				fixed.mul(PARRY_KNOCKBACK_DIVISOR, "-1")
+			), hitbox.block_pushback_modifier), "0")
 			gain_super_meter(parry_meter / 3)
 			# opponent.gain_super_meter(parry_meter / 3)
 			if not projectile:
@@ -161,7 +174,10 @@ func hit_by(hitbox):
 			current_state().interruptible_on_opponent_turn = true
 			hurt_posture(fixed.round(fixed.mul(str(hitbox.damage), hitbox.chip_damage_modifier)))
 			blocked_hitbox_plus_frames = hitbox.plus_frames
-			spawn_particle_effect(preload("res://_Sekiro/characters/sekiro/fx/FlawedParryEffect.tscn"), get_pos_visual() + particle_location)
+			spawn_particle_effect(
+				preload("res://_Sekiro/characters/sekiro/fx/FlawedParryEffect.tscn"),
+				get_pos_visual() + particle_location
+			)
 			parried = false
 			play_sound("Block")
 			play_sound("Parry")
@@ -169,7 +185,7 @@ func hit_by(hitbox):
 				host.on_got_blocked()
 		else :
 			if current_state().state_name == "Deflect":
-				relative_advantage = 5
+				relative_advantage = 6
 			elif current_state().state_name == "ProstheticUmbrella":
 				relative_advantage = 10
 			if not projectile:
@@ -179,6 +195,7 @@ func hit_by(hitbox):
 				if host.has_method("on_got_parried"):
 					host.on_got_parried()
 			gain_super_meter(parry_meter)
+			gain_deathblow_meter(fixed.round(fixed.mul(str(hitbox.damage / PARRY_CHIP_DIVISOR), hitbox.chip_damage_modifier)))
 			match hitbox.hit_height:
 				Hitbox.HitHeight.High:
 					sprite.animation = "DeflectHigh"

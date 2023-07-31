@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=2]
+[gd_scene load_steps=93 format=2]
 
 [ext_resource path="res://characters/BaseChar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://characters/BaseChar.gdshader" type="Shader" id=2]
@@ -87,6 +87,8 @@
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/action_buttons/ashina_cross.png" type="Texture" id=85]
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/action_buttons/dragon_flash.png" type="Texture" id=86]
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/action_buttons/one_mind.png" type="Texture" id=87]
+[ext_resource path="res://_Sekiro/characters/sekiro/sprites/action_buttons/tsuka_ate.png" type="Texture" id=88]
+[ext_resource path="res://_Sekiro/characters/sekiro/sprites/action_buttons/deathblow.png" type="Texture" id=89]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -180,7 +182,56 @@ height = 16
 y = -17
 height = 18
 
-[node name="Deflect" type="Node2D" parent="StateMachine" index="1"]
+[node name="StaggerOpponent" type="Node2D" parent="StateMachine" index="1"]
+script = ExtResource( 83 )
+__meta__ = {
+"_editor_description_": ""
+}
+anim_length = 6
+title = "Stagger"
+show_in_menu = false
+burst_cancellable = false
+instant_cancellable = false
+can_feint_if_possible = false
+selectable = false
+interrupt_into_string = "Deathblow
+GroundedIdle"
+change_stance_to = "Normal"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/StaggerOpponent" index="0"]
+z_index = 1000
+script = ExtResource( 6 )
+width = 5000
+height = 5000
+hitstun_ticks = 12
+hitlag_ticks = 12
+can_clash = false
+dir_x = "0.0"
+dir_y = "0.0"
+knockback = "0.0"
+start_tick = 1
+active_ticks = 1
+
+[node name="Deathblow" type="Node2D" parent="StateMachine" index="2"]
+script = ExtResource( 83 )
+__meta__ = {
+"_editor_description_": ""
+}
+anim_length = 6
+title = "Deathblow"
+type = 2
+button_texture = ExtResource( 89 )
+air_type = 2
+burst_cancellable = false
+burstable = false
+self_hit_cancellable = false
+self_interruptable = false
+reversible = false
+instant_cancellable = false
+can_feint_if_possible = false
+interrupt_from_string = "Deathblow"
+
+[node name="Deflect" type="Node2D" parent="StateMachine" index="3"]
 script = ExtResource( 9 )
 __meta__ = {
 "_editor_description_": ""
@@ -213,7 +264,7 @@ change_stance_to = "Deflect"
 initiative_effect = true
 perfect_frames = 10
 
-[node name="DeflectIdle" type="Node2D" parent="StateMachine" index="2"]
+[node name="DeflectIdle" type="Node2D" parent="StateMachine" index="4"]
 script = ExtResource( 15 )
 __meta__ = {
 "_editor_description_": ""
@@ -232,31 +283,31 @@ interrupt_into_string = "Grounded"
 allowed_stances_string = "Deflect
 "
 
-[node name="ParryHigh" parent="StateMachine" index="3"]
+[node name="ParryHigh" parent="StateMachine" index="5"]
 script = ExtResource( 12 )
 __meta__ = {
 "_editor_description_": ""
 }
 allowed_stances_string = "Normal"
 
-[node name="ParryLow" parent="StateMachine" index="4"]
+[node name="ParryLow" parent="StateMachine" index="6"]
 script = ExtResource( 12 )
 __meta__ = {
 "_editor_description_": ""
 }
 
-[node name="ParryAir" parent="StateMachine" index="5"]
+[node name="ParryAir" parent="StateMachine" index="7"]
 script = ExtResource( 12 )
 __meta__ = {
 "_editor_description_": ""
 }
 
-[node name="Slash" type="Node2D" parent="StateMachine" index="9"]
+[node name="Slash" type="Node2D" parent="StateMachine" index="11"]
 script = ExtResource( 7 )
 __meta__ = {
 "_editor_description_": ""
 }
-anim_length = 14
+anim_length = 16
 force_dir_x = "1"
 force_speed = "4"
 force_tick = 2
@@ -282,18 +333,18 @@ y = -23
 width = 21
 height = 16
 damage = 40
-hitstun_ticks = 12
+hitstun_ticks = 14
 victim_hitlag = 4
-damage_proration = 2
+damage_proration = 1
 hits_vs_aerial = false
 hit_height = 0
 dir_x = "0.75"
 dir_y = "-0.5"
 knockback = "4"
-start_tick = 5
+start_tick = 6
 active_ticks = 1
 
-[node name="Thrust" type="Node2D" parent="StateMachine" index="10"]
+[node name="Thrust" type="Node2D" parent="StateMachine" index="12"]
 script = ExtResource( 8 )
 __meta__ = {
 "_editor_description_": ""
@@ -301,7 +352,7 @@ __meta__ = {
 anim_length = 18
 force_dir_x = "1"
 force_speed = "10"
-force_tick = 2
+force_tick = 5
 title = "Thrust"
 type = 1
 button_texture = ExtResource( 74 )
@@ -324,8 +375,8 @@ y = -21
 width = 16
 height = 6
 damage = 65
-hitstun_ticks = 12
-victim_hitlag = 10
+hitstun_ticks = 21
+victim_hitlag = 6
 damage_proration = 1
 cancellable = false
 sdi_modifier = "0.0"
@@ -333,10 +384,10 @@ beats_grab = false
 screenshake_amount = 2
 dir_y = "-0.25"
 knockback = "5"
-start_tick = 6
-active_ticks = 2
+start_tick = 9
+active_ticks = 3
 
-[node name="Ichimonji" type="Node2D" parent="StateMachine" index="11"]
+[node name="Ichimonji" type="Node2D" parent="StateMachine" index="13"]
 script = ExtResource( 43 )
 __meta__ = {
 "_editor_description_": ""
@@ -388,7 +439,7 @@ minimum_grounded_frames = 7
 knockdown_extends_hitstun = false
 ground_bounce = false
 wall_slam = true
-start_tick = 10
+start_tick = 13
 active_ticks = 1
 
 [node name="Hitbox2" type="Node2D" parent="StateMachine/Ichimonji" index="1"]
@@ -409,32 +460,10 @@ minimum_grounded_frames = 7
 knockdown_extends_hitstun = false
 ground_bounce = false
 wall_slam = true
-start_tick = 10
+start_tick = 13
 active_ticks = 1
 
-[node name="Hitbox3" type="Node2D" parent="StateMachine/Ichimonji" index="2"]
-z_index = 1000
-script = ExtResource( 6 )
-x = 41
-y = -6
-height = 6
-hitstun_ticks = 15
-hitlag_ticks = 7
-victim_hitlag = 7
-damage_proration = -1
-whiff_sound = ExtResource( 16 )
-hit_sound = ExtResource( 11 )
-dir_x = "0"
-dir_y = "0"
-knockback = "0"
-minimum_grounded_frames = 7
-knockdown_extends_hitstun = false
-ground_bounce = false
-wall_slam = true
-start_tick = 10
-active_ticks = 4
-
-[node name="Nimonji" type="Node2D" parent="StateMachine" index="12"]
+[node name="Nimonji" type="Node2D" parent="StateMachine" index="14"]
 script = ExtResource( 46 )
 __meta__ = {
 "_editor_description_": ""
@@ -459,7 +488,7 @@ GroundedSuper"
 [node name="Hitbox" type="Node2D" parent="StateMachine/Nimonji" index="0"]
 z_index = 1000
 script = ExtResource( 6 )
-x = 32
+x = 28
 y = -23
 width = 14
 damage = 90
@@ -479,7 +508,7 @@ wall_slam = true
 start_tick = 6
 active_ticks = 2
 
-[node name="NightjarSlash" type="Node2D" parent="StateMachine" index="13"]
+[node name="NightjarSlash" type="Node2D" parent="StateMachine" index="15"]
 script = ExtResource( 49 )
 __meta__ = {
 "_editor_description_": ""
@@ -491,6 +520,7 @@ anim_length = 12
 enter_force_dir_x = "1"
 enter_force_speed = "10"
 title = "Nightjar Slash"
+show_in_menu = false
 type = 1
 data_ui_scene = ExtResource( 45 )
 button_texture = ExtResource( 73 )
@@ -522,7 +552,7 @@ wall_slam = true
 start_tick = 8
 active_ticks = 1
 
-[node name="NightjarSlashReverse" type="Node2D" parent="StateMachine" index="14"]
+[node name="NightjarSlashReverse" type="Node2D" parent="StateMachine" index="16"]
 script = ExtResource( 83 )
 __meta__ = {
 "_editor_description_": ""
@@ -570,7 +600,7 @@ wall_slam = true
 start_tick = 4
 active_ticks = 1
 
-[node name="SakuraDance" type="Node2D" parent="StateMachine" index="15"]
+[node name="SakuraDance" type="Node2D" parent="StateMachine" index="17"]
 script = ExtResource( 4 )
 __meta__ = {
 "_editor_description_": ""
@@ -659,7 +689,7 @@ knockback = "8"
 start_tick = 22
 active_ticks = 1
 
-[node name="Sheathe" type="Node2D" parent="StateMachine" index="16"]
+[node name="Sheathe" type="Node2D" parent="StateMachine" index="18"]
 script = ExtResource( 80 )
 apply_forces = true
 apply_fric = true
@@ -682,7 +712,7 @@ Deflect
 Umbrella"
 change_stance_to = "Sheathed"
 
-[node name="SheatheIdle" type="Node2D" parent="StateMachine" index="17"]
+[node name="SheatheIdle" type="Node2D" parent="StateMachine" index="19"]
 script = ExtResource( 83 )
 __meta__ = {
 "_editor_description_": ""
@@ -698,31 +728,11 @@ next_state_on_hold_on_opponent_turn = true
 interrupt_from_string = "Grounded
 GroundedMovement"
 interrupt_into_string = "Grounded"
+interrupt_exceptions_string = "GroundedGrab"
 allowed_stances_string = "Sheathed
 "
 
-[node name="Unsheathe" type="Node2D" parent="StateMachine" index="18"]
-script = ExtResource( 80 )
-apply_forces = true
-apply_fric = true
-apply_grav = true
-sprite_animation = "Sheathe"
-anim_length = 10
-title = "Unsheathe"
-type = 2
-button_texture = ExtResource( 82 )
-air_type = 2
-iasa_at = 10
-interruptible_on_opponent_turn = true
-dynamic_iasa = false
-interrupt_from_string = "Grounded
-GroundedSpecial"
-interrupt_into_string = "Grounded"
-interrupt_exceptions_string = "GroundedGrab"
-allowed_stances_string = "Sheathed"
-change_stance_to = "Normal"
-
-[node name="ProstheticShuriken" type="Node2D" parent="StateMachine" index="19"]
+[node name="ProstheticShuriken" type="Node2D" parent="StateMachine" index="20"]
 script = ExtResource( 53 )
 __meta__ = {
 "_editor_description_": ""
@@ -767,7 +777,7 @@ knockback = "4"
 start_tick = 12
 active_ticks = 1
 
-[node name="ProstheticShurikenFail" type="Node2D" parent="StateMachine" index="20"]
+[node name="ProstheticShurikenFail" type="Node2D" parent="StateMachine" index="21"]
 script = ExtResource( 59 )
 __meta__ = {
 "_editor_description_": ""
@@ -794,7 +804,7 @@ Deflect"
 change_stance_to = "Normal"
 emblem_cost = 2
 
-[node name="ProstheticFlameStartup" type="Node2D" parent="StateMachine" index="21"]
+[node name="ProstheticFlameStartup" type="Node2D" parent="StateMachine" index="22"]
 script = ExtResource( 70 )
 __meta__ = {
 "_editor_description_": ""
@@ -824,7 +834,7 @@ emblem_cost = 6
 charged_state = "ProstheticFlameCharged"
 normal_state = "ProstheticFlameNormal"
 
-[node name="ProstheticFlameNormal" type="Node2D" parent="StateMachine" index="22"]
+[node name="ProstheticFlameNormal" type="Node2D" parent="StateMachine" index="23"]
 position = Vector2( 1, 0 )
 script = ExtResource( 72 )
 __meta__ = {
@@ -887,7 +897,7 @@ knockback = "4"
 start_tick = 7
 active_ticks = 3
 
-[node name="ProstheticFlameCharged" type="Node2D" parent="StateMachine" index="23"]
+[node name="ProstheticFlameCharged" type="Node2D" parent="StateMachine" index="24"]
 script = ExtResource( 72 )
 __meta__ = {
 "_editor_description_": ""
@@ -948,7 +958,7 @@ dir_y = "-0.5"
 knockback = "4"
 start_tick = 12
 
-[node name="ProstheticFlameFail" type="Node2D" parent="StateMachine" index="24"]
+[node name="ProstheticFlameFail" type="Node2D" parent="StateMachine" index="25"]
 script = ExtResource( 59 )
 __meta__ = {
 "_editor_description_": ""
@@ -975,7 +985,7 @@ Deflect"
 change_stance_to = "Normal"
 emblem_cost = 6
 
-[node name="ProstheticAxeStartup" type="Node2D" parent="StateMachine" index="25"]
+[node name="ProstheticAxeStartup" type="Node2D" parent="StateMachine" index="26"]
 script = ExtResource( 70 )
 __meta__ = {
 "_editor_description_": ""
@@ -1003,7 +1013,7 @@ emblem_cost = 6
 charged_state = "ProstheticAxeCharged"
 normal_state = "ProstheticAxeNormal"
 
-[node name="ProstheticAxeNormal" type="Node2D" parent="StateMachine" index="26"]
+[node name="ProstheticAxeNormal" type="Node2D" parent="StateMachine" index="27"]
 script = ExtResource( 47 )
 __meta__ = {
 "_editor_description_": ""
@@ -1118,7 +1128,7 @@ knockback = "4"
 start_tick = 11
 active_ticks = 2
 
-[node name="ProstheticAxeCharged" type="Node2D" parent="StateMachine" index="27"]
+[node name="ProstheticAxeCharged" type="Node2D" parent="StateMachine" index="28"]
 script = ExtResource( 47 )
 __meta__ = {
 "_editor_description_": ""
@@ -1237,7 +1247,7 @@ knockback = "4"
 start_tick = 22
 active_ticks = 2
 
-[node name="ProstheticAxeFail" type="Node2D" parent="StateMachine" index="28"]
+[node name="ProstheticAxeFail" type="Node2D" parent="StateMachine" index="29"]
 script = ExtResource( 59 )
 __meta__ = {
 "_editor_description_": ""
@@ -1264,7 +1274,7 @@ Deflect"
 change_stance_to = "Normal"
 emblem_cost = 6
 
-[node name="ProstheticCracker" type="Node2D" parent="StateMachine" index="29"]
+[node name="ProstheticCracker" type="Node2D" parent="StateMachine" index="30"]
 script = ExtResource( 53 )
 __meta__ = {
 "_editor_description_": ""
@@ -1309,7 +1319,7 @@ knockback = "4"
 start_tick = 12
 active_ticks = 1
 
-[node name="ProstheticCrackerFail" type="Node2D" parent="StateMachine" index="30"]
+[node name="ProstheticCrackerFail" type="Node2D" parent="StateMachine" index="31"]
 script = ExtResource( 59 )
 __meta__ = {
 "_editor_description_": ""
@@ -1336,7 +1346,7 @@ Deflect"
 change_stance_to = "Normal"
 emblem_cost = 4
 
-[node name="ProstheticSpear" type="Node2D" parent="StateMachine" index="31"]
+[node name="ProstheticSpear" type="Node2D" parent="StateMachine" index="32"]
 script = ExtResource( 53 )
 __meta__ = {
 "_editor_description_": ""
@@ -1381,7 +1391,7 @@ knockback = "4"
 start_tick = 12
 active_ticks = 1
 
-[node name="ProstheticSpearFail" type="Node2D" parent="StateMachine" index="32"]
+[node name="ProstheticSpearFail" type="Node2D" parent="StateMachine" index="33"]
 script = ExtResource( 59 )
 __meta__ = {
 "_editor_description_": ""
@@ -1408,7 +1418,7 @@ Deflect"
 change_stance_to = "Normal"
 emblem_cost = 4
 
-[node name="ProstheticFan" type="Node2D" parent="StateMachine" index="33"]
+[node name="ProstheticFan" type="Node2D" parent="StateMachine" index="34"]
 script = ExtResource( 53 )
 __meta__ = {
 "_editor_description_": ""
@@ -1453,7 +1463,7 @@ knockback = "4"
 start_tick = 12
 active_ticks = 1
 
-[node name="ProstheticFanFail" type="Node2D" parent="StateMachine" index="34"]
+[node name="ProstheticFanFail" type="Node2D" parent="StateMachine" index="35"]
 script = ExtResource( 59 )
 __meta__ = {
 "_editor_description_": ""
@@ -1480,7 +1490,7 @@ Deflect"
 change_stance_to = "Normal"
 emblem_cost = 6
 
-[node name="ProstheticRaven" type="Node2D" parent="StateMachine" index="35"]
+[node name="ProstheticRaven" type="Node2D" parent="StateMachine" index="36"]
 script = ExtResource( 44 )
 __meta__ = {
 "_editor_description_": ""
@@ -1512,7 +1522,7 @@ Deflect"
 change_stance_to = "Normal"
 emblem_cost = 8
 
-[node name="ProstheticRavenFail" type="Node2D" parent="StateMachine" index="36"]
+[node name="ProstheticRavenFail" type="Node2D" parent="StateMachine" index="37"]
 script = ExtResource( 59 )
 __meta__ = {
 "_editor_description_": ""
@@ -1539,7 +1549,7 @@ Deflect"
 change_stance_to = "Normal"
 emblem_cost = 8
 
-[node name="ProstheticUmbrella" type="Node2D" parent="StateMachine" index="37"]
+[node name="ProstheticUmbrella" type="Node2D" parent="StateMachine" index="38"]
 script = ExtResource( 75 )
 __meta__ = {
 "_editor_description_": ""
@@ -1577,7 +1587,7 @@ initiative_effect = true
 perfect_frames = 15
 emblem_cost = 2
 
-[node name="ProstheticUmbrellaFail" type="Node2D" parent="StateMachine" index="38"]
+[node name="ProstheticUmbrellaFail" type="Node2D" parent="StateMachine" index="39"]
 script = ExtResource( 59 )
 __meta__ = {
 "_editor_description_": ""
@@ -1604,7 +1614,7 @@ Deflect"
 change_stance_to = "Normal"
 emblem_cost = 2
 
-[node name="UmbrellaIdle" type="Node2D" parent="StateMachine" index="39"]
+[node name="UmbrellaIdle" type="Node2D" parent="StateMachine" index="40"]
 script = ExtResource( 78 )
 __meta__ = {
 "_editor_description_": ""
@@ -1622,7 +1632,7 @@ GroundedMovement"
 interrupt_into_string = "Grounded"
 allowed_stances_string = "Umbrella"
 
-[node name="UmbrellaDashForward" type="Node2D" parent="StateMachine" index="40"]
+[node name="UmbrellaDashForward" type="Node2D" parent="StateMachine" index="41"]
 script = ExtResource( 25 )
 __meta__ = {
 "_editor_description_": ""
@@ -1653,7 +1663,7 @@ dash_speed = 2
 fric = "0.02"
 spawn_particle = false
 
-[node name="UmbrellaDashBackward" type="Node2D" parent="StateMachine" index="41"]
+[node name="UmbrellaDashBackward" type="Node2D" parent="StateMachine" index="42"]
 script = ExtResource( 25 )
 __meta__ = {
 "_editor_description_": ""
@@ -1684,7 +1694,7 @@ spawn_particle = false
 stop_frame = 10
 back_penalty = 0
 
-[node name="UmbrellaSpin" type="Node2D" parent="StateMachine" index="42"]
+[node name="UmbrellaSpin" type="Node2D" parent="StateMachine" index="43"]
 script = ExtResource( 79 )
 __meta__ = {
 "_editor_description_": ""
@@ -1721,7 +1731,50 @@ change_stance_to = "Umbrella"
 initiative_effect = true
 perfect_frames = 15
 
-[node name="AshinaCross" type="Node2D" parent="StateMachine" index="43"]
+[node name="TsukaAte" type="Node2D" parent="StateMachine" index="44"]
+script = ExtResource( 7 )
+__meta__ = {
+"_editor_description_": ""
+}
+apply_forces = true
+apply_fric = true
+apply_grav = true
+anim_length = 14
+enter_force_dir_x = "1.0"
+enter_force_speed = "4.0"
+title = "Pommel"
+type = 1
+button_texture = ExtResource( 88 )
+interrupt_from_string = "GroundedAttack
+Grounded"
+interrupt_into_string = "Grounded"
+hit_cancel_into_string = "GroundedAttack
+GroundedSpecial
+GroundedSuper
+Jump"
+allowed_stances_string = "Sheathed"
+change_stance_to = "Normal"
+
+[node name="Hitbox" type="Node2D" parent="StateMachine/TsukaAte" index="0"]
+z_index = 1000
+script = ExtResource( 6 )
+x = 13
+y = -21
+width = 13
+height = 10
+damage = 40
+hitstun_ticks = 12
+victim_hitlag = 4
+damage_proration = 1
+hits_vs_aerial = false
+hit_height = 0
+dir_x = "0.75"
+dir_y = "-0.5"
+knockback = "4"
+start_tick = 3
+active_ticks = 1
+
+[node name="AshinaCross" type="Node2D" parent="StateMachine" index="45"]
 script = ExtResource( 7 )
 __meta__ = {
 "_editor_description_": ""
@@ -1752,7 +1805,6 @@ height = 16
 damage = 40
 hitstun_ticks = 12
 victim_hitlag = 4
-damage_proration = 2
 hits_vs_aerial = false
 hit_height = 0
 dir_x = "0.75"
@@ -1761,7 +1813,7 @@ knockback = "4"
 start_tick = 5
 active_ticks = 1
 
-[node name="DragonFlash" type="Node2D" parent="StateMachine" index="44"]
+[node name="DragonFlash" type="Node2D" parent="StateMachine" index="46"]
 script = ExtResource( 7 )
 __meta__ = {
 "_editor_description_": ""
@@ -1792,7 +1844,6 @@ height = 16
 damage = 40
 hitstun_ticks = 12
 victim_hitlag = 4
-damage_proration = 2
 hits_vs_aerial = false
 hit_height = 0
 dir_x = "0.75"
@@ -1801,7 +1852,7 @@ knockback = "4"
 start_tick = 5
 active_ticks = 1
 
-[node name="OneMind" type="Node2D" parent="StateMachine" index="45"]
+[node name="OneMind" type="Node2D" parent="StateMachine" index="47"]
 script = ExtResource( 7 )
 __meta__ = {
 "_editor_description_": ""
@@ -1841,7 +1892,7 @@ knockback = "4"
 start_tick = 5
 active_ticks = 1
 
-[node name="OneMindFollowup" type="Node2D" parent="StateMachine" index="46"]
+[node name="OneMindFollowup" type="Node2D" parent="StateMachine" index="48"]
 script = ExtResource( 7 )
 __meta__ = {
 "_editor_description_": ""
@@ -1882,16 +1933,16 @@ knockback = "4"
 start_tick = 5
 active_ticks = 1
 
-[node name="Wait" parent="StateMachine" index="48"]
+[node name="Wait" parent="StateMachine" index="50"]
 script = ExtResource( 37 )
 __meta__ = {
 "_editor_description_": ""
 }
 
-[node name="Fall" parent="StateMachine" index="54"]
+[node name="Fall" parent="StateMachine" index="56"]
 sprite_animation = "Fall"
 
-[node name="PostureBroken" type="Node2D" parent="StateMachine" index="58"]
+[node name="PostureBroken" type="Node2D" parent="StateMachine" index="60"]
 script = ExtResource( 39 )
 __meta__ = {
 "_editor_description_": ""
@@ -1917,7 +1968,7 @@ height = 12
 active_ticks = 5
 endless = true
 
-[node name="DashForward" parent="StateMachine" index="62"]
+[node name="DashForward" parent="StateMachine" index="64"]
 script = ExtResource( 23 )
 __meta__ = {
 "_editor_description_": ""
@@ -1937,7 +1988,7 @@ dash_speed = 4
 fric = "0.02"
 spawn_particle = false
 
-[node name="ChargeDashForward" parent="StateMachine" index="63"]
+[node name="ChargeDashForward" parent="StateMachine" index="65"]
 script = ExtResource( 23 )
 __meta__ = {
 "_editor_description_": ""
@@ -1945,7 +1996,7 @@ __meta__ = {
 allowed_stances_string = "Normal
 Deflect"
 
-[node name="DashBackward" parent="StateMachine" index="64"]
+[node name="DashBackward" parent="StateMachine" index="66"]
 script = ExtResource( 23 )
 __meta__ = {
 "_editor_description_": ""
@@ -1963,7 +2014,7 @@ fric = "0.02"
 spawn_particle = false
 back_penalty = 0
 
-[node name="DashBackwardHold" parent="StateMachine" index="65"]
+[node name="DashBackwardHold" parent="StateMachine" index="67"]
 script = ExtResource( 23 )
 __meta__ = {
 "_editor_description_": ""
@@ -1971,5 +2022,25 @@ __meta__ = {
 allowed_stances_string = "Normal
 Deflect"
 
-[node name="Jump" parent="StateMachine" index="67"]
+[node name="Jump" parent="StateMachine" index="69"]
 fall_anim = true
+
+[node name="Unsheathe" type="Node2D" parent="StateMachine" index="76"]
+script = ExtResource( 80 )
+apply_forces = true
+apply_fric = true
+apply_grav = true
+sprite_animation = "Sheathe"
+anim_length = 10
+title = "Unsheathe"
+button_texture = ExtResource( 82 )
+air_type = 2
+iasa_at = 10
+interruptible_on_opponent_turn = true
+dynamic_iasa = false
+interrupt_from_string = "Grounded
+GroundedSpecial"
+interrupt_into_string = "Grounded"
+interrupt_exceptions_string = "GroundedGrab"
+allowed_stances_string = "Sheathed"
+change_stance_to = "Normal"
