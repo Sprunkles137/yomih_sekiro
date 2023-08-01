@@ -1,5 +1,5 @@
 extends CharacterState
 
 func is_usable():
-  # Overwriting vanilla parry for Squared stance.
+  # Overwriting vanilla parry mechanics.
 	return false

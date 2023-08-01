@@ -21,12 +21,14 @@
 - [ ] Implement Healing Gourd to recover health.
   - Dramatically reduce max HP (50%) to compensate.
   - Gourd may only be used a fixed number of times in a battle.
+  - Would be really silly.
 - [ ] Implement the Finger Whistle.
   - Would be the final and only remaining Shinobi Prosthetic from the base game to implement.
     a) Area-wide stun. Sounds like a more OP version of Firecracker though.
     b) Area-wide knockback. Meant to push opponents or projectiles away.
+  - May not be a good idea. The prosthetic tool idea needs revisited anyhow.
 
-# Stances
+# Actions (by stance)
 
 ## Normal
 
@@ -54,7 +56,7 @@ A thrusting attack. Hits narrowly and has slightly more startup, but moves the W
 
 ### Ichimonji
 
-A simple, overhead strike. Long windup but deals heavy damage. Recovers posture with the initial step. Can be canceled into itself (Nimonji internally) to hit again.
+A simple, overhead strike. Long windup but deals heavy damage. Recovers posture with the initial step. Can be canceled into a followup hit.
 
 - [x] Implement.
 - [ ] Animate.
@@ -76,11 +78,11 @@ A series of rising slashes out of a jump. Hits at a lower angle, so not exactly 
 
 A leaping slash meant to close the gap between the opponent. Jumps further than Thrust.
 
-- [ ] Implement.
+- [x] Implement.
 - [ ] Animate.
 - [x] Button icon.
 - [ ] Sound design.
-- [ ] Reversal performs a slash immediately (5-6 frame startup) and sends the Wolf careening backward, to put some distance with the opponent.
+- [x] Reversal performs a slash immediately (5-6 frame startup) and sends the Wolf careening backward, to put some distance with the opponent.
 
 ### Leaping Kick
 
@@ -94,11 +96,11 @@ Perform a forward jump that crushes low attacks, followed by dropping the leg do
 
 ### Praying Strikes
 
-Step forward and jab with a open palm. This has little reach but comes out quick (4-5 frames) and has decent hitstun.
+Step forward and jab with a open palm. Shorter reach and low damage, but comes out quick (4-5 frames) and has decent hitstun.
 
 - [ ] Implement.
 - [ ] Animate.
-- [ ] Button icon.
+- [x] Button icon.
 - [ ] Sound design.
 - [ ] Charge button performs the shoulder strike from Exorcism. More details below.
 - [ ] Can be followed up with itself to hit again, different animation.
@@ -110,22 +112,32 @@ Steps into a shoulder bash. Has long startup, but it sends the opponent a good d
 
 - [ ] Implement.
 - [ ] Animate.
-- [ ] Button icon.
+- [x] Button icon.
 - [ ] Sound design.
 
 ### Deflect
 
 Guarding against damage. Is entered by performing the Deflect action and hitting Wait or Hold. Damage taken is dealt to the Wolf's posture, which is explained in the General Characteristics section.
 
+### Mikiri Counter
+
+The Wolf steps forward, anticipating a low attack. Essentially a fancy Low Parry that deals significant posture damage and gives decent frame advantage.
+
+- [x] Implement.
+- [ ] Animate.
+- [x] Button icon.
+- [x] Sound design.
+- [x] Particle.
+
 ### Sheathe
 
 Sheathe Kusabimaru. The Wolf enters a different stance where extra powerful moves can be performed, at the cost of Spirit Emblems. The Wolf's primary options are limited. Has a forward and backward dash.
 
-- [ ] Implement.
+- [x] Implement.
 - [ ] Animate.
 - [x] Button icon.
 - [ ] Sound design.
-- [ ] Implement Unsheathe, freeing the Wolf to do something else.
+- [x] Implement Unsheathe, freeing the Wolf to do something else.
 
 ### Deathblow
 
@@ -133,7 +145,7 @@ Situational grab move performed when within a certain distance of the opponent a
 
 - [ ] Implement.
 - [ ] Animate.
-- [ ] Button icon.
+- [x] Button icon.
 - [ ] Sound design.
 
 ### Loaded Shuriken
@@ -149,7 +161,7 @@ Quickly (6-8 frames) shoots a spread of lightly damaging shuriken. Costs 4 Spiri
 
 ### Flame Vent
 
-Shoots a gust of flame outward in a wide area. Costs 6 Spirit Emblems.
+Shoots a gust of flame forward in a wide area. Costs 6 Spirit Emblems.
 
 - [x] Implement.
 - [ ] Animate.
@@ -214,7 +226,7 @@ Teleport. Costs 4 Spirit Emblems.
 
 ### Loaded Umbrella
 
-A defensive option better than Deflect. It has longer parry frames (10 → 15-16) and allows the Wolf to move forward and backward while blocking attacks. Costs 2 Spirit Emblems.
+A defensive option better than Deflect. It allows the Wolf to move forward and backward while blocking attacks, and can parry grab attacks. Costs 2 Spirit Emblems.
 
 - [x] Implement.
 - [ ] Animate.
@@ -224,16 +236,11 @@ A defensive option better than Deflect. It has longer parry frames (10 → 15-16
 - [ ] Performing the Umbrella action again performs another deflection, still at the cost of Spirit Emblems.
 - [ ] Projected Force: A unique attack can be performed out of the block stance. Moderately long windup time, but has poise and deals moderate damage.
 - [ ] Additionally, after deflecting or parrying enough damage from projectiles, Projected Force shoots out a cross-slash projectile with a big hitbox.
-
-#### Considering
-
-- [ ] Limit what options can be performed out of the Umbrella stance.
-  - Would give conditional disadvantages for using it. Might not feel good to use for that reason.
-  - Would need to implement a Stand action that closes the Loaded Umbrella. Would subtract from whatever frame advantage the Umbrella gains from a deflection.
+- [ ] Parries grab attacks.
 
 ### Sabimaru
 
-A rushdown moveset consisting of a series of slashes with modest range that hit at medium height. Sabimaru performs two slashes, consuming 2 Spirit Emblems per use.
+A rushdown attack consisting of a series of slashes with modest range that hits at medium height. The Wolf attacks with both Sabimaru and Kusabimaru, performing two slashes. Consumes 2 Spirit Emblems per use.
 
 - [ ] Implement.
 - [ ] Animate.
@@ -255,11 +262,9 @@ A gust of wind is created around the Wolf, reflecting projectiles and turning op
 - [ ] Actually reflect projectiles.
 - [ ] Actually turns around opponents.
 
-### Super Actions
-
 ### Mortal Draw
 
-Draws the Mortal Blade from its sheathe. The Wolf enters the Hairui stance, described in the Stances section. Requires 3 bars of super to use, whereby one is taken to draw the blade and the remaining bars are used as a timer.
+Draws the Mortal Blade from its sheathe. The Wolf enters the Hairui stance, described in the Stances section. Requires 3 bars of super to use, whereby one is taken to draw the blade and the remaining super is used as a timer.
 
 - [ ] Implement.
 - [ ] Animate.
@@ -268,12 +273,12 @@ Draws the Mortal Blade from its sheathe. The Wolf enters the Hairui stance, desc
 
 ### Spirit Sugars
 
-The Wolf bites down on the chosen candy and imparts inhuman benedictions into his body, temporarily raising stats at the cost of 1 bar of super. Effect lasts for some 300 ticks and are not stackable. Performs a little animation and particle.
+The Wolf invokes the powers of a spirit, imparting inhuman benedictions. Effect lasts for some 300 ticks and are not stackable. Performs a little animation and particle. Consumes 1 bar of super.
 
 - Ako's Sugar (red) increases damage dealt (+12.5%)
 - Ungo's Sugar (blue) increases damage reduction (+33%)
 - Gokan's Sugar (yellow) increases posture defense (+67%)
-- Yashariku's Sugar (black and red) greatly increases damage dealt (+25%) but increases damage taken (HP by 50%, Posture by 100%).
+- Yashariku's Sugar (black and red) greatly increases damage dealt (+25%) but increases damage taken (HP by 100%, Posture by 200%).
 
 - [ ] Implement.
 - [ ] Animate.
@@ -307,7 +312,7 @@ Charge pressure within the scabbard, then perform a diagonal slash from a sheath
 
 Perform a big overhead slash in the blink of an eye (2 Spirit Emblems). Follows up with many slashing hits around the Wolf (4 Spirit Emblems).
 
-- [ ] Implement.
+- [x] Implement.
 - [ ] Animate.
 - [x] Button icon.
 - [ ] Sound design.
@@ -318,7 +323,7 @@ Perform a big overhead slash in the blink of an eye (2 Spirit Emblems). Follows 
 
 Step forward and slash twice very quickly, parrying any attack it comes in contact with. Costs 4 Spirit Emblems.
 
-- [ ] Implement.
+- [x] Implement.
 - [ ] Animate.
 - [x] Button icon.
 - [ ] Sound design.

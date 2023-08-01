@@ -1,20 +1,22 @@
 extends Fighter
 
 const MAX_POSTURE = 333
-const MAX_DEATHBLOW = 100
+const MAX_DEATHBLOW = 500
 const MAX_SPIRIT_EMBLEMS = 20
 const POSTURE_RECOVERY_TIME = 30
+const DEATHBLOW_RECOVERY_TIME = 60
 
 var parry_anim: String = ""
 var posture: int = MAX_POSTURE
-var deathblow: int = 0
+var deathblow: int = MAX_DEATHBLOW
 var spirit_emblems: int = 12
 var time_since_last_hit: int = 0
+var time_since_last_hurt: int = 0
 
 var slashcounter: int = 0
 
-func hurt_posture(damage:int, minimum = 0, meter_gain_modifier = "1.0"):
-	time_since_last_hit = 0
+func hurt_posture(damage: int, minimum = 0, meter_gain_modifier = "1.0"):
+	time_since_last_hurt = 0
 	if opponent.combo_count == 0:
 		trail_hp = hp
 	if damage == 0:
@@ -33,7 +35,7 @@ func hurt_posture(damage:int, minimum = 0, meter_gain_modifier = "1.0"):
 	posture -= damage
 	add_penalty( - 25)
 	if posture <= 0:
-		state_machine._change_state("PostureBroken")
+		change_state("PostureBroken")
 		posture = MAX_POSTURE
 
 func recover_posture(val: int):
@@ -41,15 +43,25 @@ func recover_posture(val: int):
 	return posture
 
 func recover_posture_passive(val: int):
-	if time_since_last_hit > POSTURE_RECOVERY_TIME:
+	if time_since_last_hurt > POSTURE_RECOVERY_TIME:
 		recover_posture(val)
 	return posture
 
-func gain_deathblow_meter(val: int):
+func recover_deathblow(val: int):
 	deathblow = Utils.int_min(deathblow + val, MAX_DEATHBLOW)
-	if deathblow == MAX_DEATHBLOW:
-		current_state().queue_state_change("StaggerOpponent")
-		deathblow = 0
+	return deathblow
+
+func recover_deathblow_passive(val: int):
+	if time_since_last_hit > DEATHBLOW_RECOVERY_TIME:
+		recover_deathblow(val)
+	return deathblow
+
+func gain_deathblow_meter(val: int):
+	time_since_last_hit = 0
+	deathblow = Utils.int_max(deathblow - val, 0)
+	if deathblow == 0:
+		change_state("StaggerOpponent")
+		deathblow = MAX_DEATHBLOW
 	return deathblow
 
 func change_emblems(count: int):
@@ -61,7 +73,7 @@ func change_emblems(count: int):
 
 func on_got_hit():
 	.on_got_hit()
-	time_since_last_hit = 0
+	time_since_last_hurt = 0
 
 func set_relative_advantage(opponent, relative: int):
 	if relative == 0:
@@ -72,15 +84,19 @@ func set_relative_advantage(opponent, relative: int):
 	# Set hitlag on opponent to accomodate lost time
 	if remaining_time < relative:
 		opponent.hitlag_ticks = relative - remaining_time
-	# Set advantage relative to anim length if no interruptible frame exists
-	if opponent.current_state().iasa_at < 0:
-		current_state().current_tick = opponent.current_state().anim_length - relative
 	# Set advantage up to opponent's interruptible frame
-	else:
-		current_state().current_tick = Utils.int_min(
-			opponent.current_state().current_tick + relative,
-			opponent.current_state().iasa_at - 1
-		)
+	var cur_tick = Utils.int_min(
+		opponent.current_state().current_tick + relative,
+		opponent.current_state().iasa_at - 1
+	)
+	current_state().current_tick = cur_tick
+	# print_debug(
+	# 	"anim_length: ", opponent.current_state().anim_length,
+	# 	"\niasa_at: ", opponent.current_state().iasa_at,
+	# 	"\ncurrent_tick: ", opponent.current_state().current_tick,
+	# 	"\nremaining_time: ", remaining_time,
+	# 	"\ncurrent_tick: ", cur_tick
+	# )
 
 func hit_by(hitbox):
 	if parried:
@@ -195,7 +211,7 @@ func hit_by(hitbox):
 				if host.has_method("on_got_parried"):
 					host.on_got_parried()
 			gain_super_meter(parry_meter)
-			gain_deathblow_meter(fixed.round(fixed.mul(str(hitbox.damage / PARRY_CHIP_DIVISOR), hitbox.chip_damage_modifier)))
+			gain_deathblow_meter(fixed.round(str(hitbox.damage / 3)))
 			match hitbox.hit_height:
 				Hitbox.HitHeight.High:
 					sprite.animation = "DeflectHigh"
@@ -210,6 +226,7 @@ func hit_by(hitbox):
 			)
 			play_sound("Parry2")
 			play_sound("Parry")
+			emit_signal("parried")
 		set_relative_advantage(opponent, relative_advantage)
 
 func init(pos = null):
@@ -220,3 +237,6 @@ func init(pos = null):
 func tick():
 	.tick()
 	time_since_last_hit += 1
+	time_since_last_hurt += 1
+	recover_deathblow_passive(1)
+

@@ -20,5 +20,5 @@ func _process(delta):
 		spirit_emblem_count.text = str(fighter.spirit_emblems)
 		posture_meter.value = 1 - (fighter.posture / float(fighter.MAX_POSTURE))
 		posture_meter.tint_progress = Color("ff9113") if posture_meter.value > 0.667 else Color("ffd519")
-		deathblow_meter.value = fighter.deathblow / float(fighter.MAX_DEATHBLOW)
-		deathblow_meter.tint_progress = Color("ff9113") if deathblow_meter.value < 0.333 else Color("ffd519")
+		deathblow_meter.value = 1 - (fighter.deathblow / float(fighter.MAX_DEATHBLOW))
+		deathblow_meter.tint_progress = Color("ff9113") if deathblow_meter.value > 0.667 else Color("ffd519")

@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=60 format=2]
+[gd_resource type="SpriteFrames" load_steps=64 format=2]
 
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/parry1.png" type="Texture" id=1]
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/deflectmid.png" type="Texture" id=2]
@@ -14,7 +14,7 @@
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/thrust1_4.png" type="Texture" id=12]
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/slash2_4.png" type="Texture" id=13]
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/slash2_3.png" type="Texture" id=14]
-[ext_resource path="res://_Sekiro/characters/sekiro/sprites/jump.png" type="Texture" id=15]
+[ext_resource path="res://_Sekiro/characters/sekiro/sprites/jump1.png" type="Texture" id=15]
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/slash2_1.png" type="Texture" id=16]
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/slash2_2.png" type="Texture" id=17]
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/ichimonji1.png" type="Texture" id=18]
@@ -25,7 +25,7 @@
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/thrust2_4.png" type="Texture" id=23]
 [ext_resource path="res://characters/stickman/sprites/stickman5.png" type="Texture" id=24]
 [ext_resource path="res://characters/stickman/sprites/stickman6.png" type="Texture" id=25]
-[ext_resource path="res://_Sekiro/characters/sekiro/sprites/fall.png" type="Texture" id=26]
+[ext_resource path="res://_Sekiro/characters/sekiro/sprites/jump3.png" type="Texture" id=26]
 [ext_resource path="res://characters/stickman/sprites/stickman17.png" type="Texture" id=27]
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/deflecthigh.png" type="Texture" id=28]
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/parry2.png" type="Texture" id=29]
@@ -51,8 +51,12 @@
 [ext_resource path="res://characters/stickman/sprites/stickman10.png" type="Texture" id=49]
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/prosthetic_axe_charged2.png" type="Texture" id=50]
 [ext_resource path="res://_Sekiro/characters/sekiro/sprites/prosthetic_axe_charged4.png" type="Texture" id=51]
+[ext_resource path="res://_Sekiro/characters/sekiro/sprites/ashina_cross2.png" type="Texture" id=52]
+[ext_resource path="res://_Sekiro/characters/sekiro/sprites/one_mind.png" type="Texture" id=53]
+[ext_resource path="res://_Sekiro/characters/sekiro/sprites/ashina_cross3.png" type="Texture" id=54]
 [ext_resource path="res://characters/stickman/sprites/stickman37.png" type="Texture" id=55]
 [ext_resource path="res://characters/stickman/sprites/stickman38.png" type="Texture" id=56]
+[ext_resource path="res://_Sekiro/characters/sekiro/sprites/ashina_cross1.png" type="Texture" id=57]
 [ext_resource path="res://characters/stickman/sprites/stickman61.png" type="Texture" id=63]
 [ext_resource path="res://characters/stickman/sprites/stickman59.png" type="Texture" id=64]
 [ext_resource path="res://characters/stickman/sprites/stickman58.png" type="Texture" id=65]
@@ -62,6 +66,11 @@
 
 [resource]
 animations = [ {
+"frames": [ ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 57 ), ExtResource( 52 ), ExtResource( 54 ) ],
+"loop": true,
+"name": "AshinaCross",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 33 ) ],
 "loop": true,
 "name": "Burst",
@@ -157,7 +166,7 @@ animations = [ {
 "name": "InstantCancel",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 15 ) ],
+"frames": [ ExtResource( 15 ), ExtResource( 15 ), ExtResource( 15 ), ExtResource( 26 ) ],
 "loop": true,
 "name": "Jump",
 "speed": 5.0
@@ -175,6 +184,11 @@ animations = [ {
 "frames": [ ExtResource( 38 ) ],
 "loop": true,
 "name": "Landing",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 53 ), ExtResource( 53 ), ExtResource( 5 ) ],
+"loop": true,
+"name": "OneMind",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 5 ), ExtResource( 5 ), ExtResource( 45 ), ExtResource( 45 ), ExtResource( 45 ), ExtResource( 45 ), ExtResource( 50 ), ExtResource( 50 ), ExtResource( 50 ), ExtResource( 48 ), ExtResource( 48 ), ExtResource( 51 ), ExtResource( 51 ), ExtResource( 36 ), ExtResource( 36 ), ExtResource( 41 ), ExtResource( 41 ), ExtResource( 47 ), ExtResource( 47 ) ],
